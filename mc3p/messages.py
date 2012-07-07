@@ -531,7 +531,7 @@ srv_msgs[0xfa] = defmsg(0xfa, "Plugin message", [
 
 cli_msgs[0x09] = \
 srv_msgs[0x09] = defmsg(0x09, "Respawn", [
-    ('world', MC_byte),
+    ('world', MC_int),
     ('difficulty', MC_byte),
     ('mode', MC_byte),
     ('world_height', MC_short),
