@@ -20,7 +20,7 @@ from sys import version_info
 from setuptools import setup, find_packages
 
 basename = "mc3p"
-version = "0.3"
+version = "0.3.1"
 pyversion = "%s.%s" % (version_info.major, version_info.minor)
 
 setup(
@@ -31,9 +31,11 @@ setup(
     test_suite = 'test_plugins',
     author = "Matt McGill",
     author_email = "matt.mcgill@gmail.com",
+    maintainer = "Kier Davis",
+    maintainer_email = "kierdavis@gmail.com",
     description = "Pluggable Minecraft proxy",
     keywords = "minecraft proxy",
-    url = "https://github.com/mmcgill/mc3p",
+    url = "https://github.com/kierdavis/mc3p",
     install_requires = ("gevent", "pycrypto", "requests", "certifi", "blessings")
 )
 

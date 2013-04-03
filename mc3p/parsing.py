@@ -546,3 +546,70 @@ def emit_tile_entity(data):
         return emit_short(len(data)) + data
 
 MC_tile_entity = Parsem(parse_tile_entity, emit_tile_entity)
+
+def parse_update_score(stream):
+    item_name = parse_string(stream)
+    update_remove = parse_byte(stream)
+    score_name = parse_string(stream) if update_remove == 0 else None
+    value = parse_int(stream) if update_remove == 0 else None
+    return {'item_name': item_name, 'update_remove': update_remove, 'score_name': score_name, 'value': value}
+
+def emit_update_score(data):
+    packet = emit_string(data["item_name"]) + emit_byte(data["update_remove"])
+    if data["update_remove"] == 0:
+        packet += emit_string(data["score_name"]) + emit_int(data["value"])
+    return packet
+
+MC_update_score = Parsem(parse_update_score, emit_update_score)
+
+def parse_teams_v56(stream):
+    name = parse_string(stream)
+    mode = parse_byte(stream)
+    display_name = parse_string(stream) if mode in (0, 2) else None
+    prefix = parse_string(stream) if mode in (0, 2) else None
+    suffix = parse_string(stream) if mdoe in (0, 2) else None
+    friendly_fire = parse_bool(stream) if mode in (0, 2) else None
+    player_count = parse_short(stream) if mode in (0, 3, 4) else 0
+    players = [parse_string(stream) for i in xrange(player_count)]
+    return {"name": name, "mode": mode, "display_name": display_name, "prefix": prefix, "suffix": suffix, "friendly_fire": friendly_fire, "player_count": player_count, "players": players}
+
+def emit_teams_v56(data):
+    packet = emit_string(data["name"])
+    packet += emit_byte(data["mode"])
+    if data["mode"] in (0, 2):
+        packet += emit_string(data["display_name"])
+        packet += emit_string(data["prefix"])
+        packet += emit_string(data["suffix"])
+        packet += emit_bool(data["friendly_fire"])
+    if data["mode"] in (0, 3, 4):
+        packet += emit_short(data["player_count"])
+        packet += "".join([emit_string(s) for s in data["players"]])
+    return packet
+
+MC_teams_v56 = Parsem(parse_teams_v56, emit_teams_v56)
+
+def parse_teams_v60(stream):
+    name = parse_string(stream)
+    mode = parse_byte(stream)
+    display_name = parse_string(stream) if mode in (0, 2) else None
+    prefix = parse_string(stream) if mode in (0, 2) else None
+    suffix = parse_string(stream) if mdoe in (0, 2) else None
+    friendly_fire = parse_byte(stream) if mode in (0, 2) else None
+    player_count = parse_short(stream) if mode in (0, 3, 4) else 0
+    players = [parse_string(stream) for i in xrange(player_count)]
+    return {"name": name, "mode": mode, "display_name": display_name, "prefix": prefix, "suffix": suffix, "friendly_fire": friendly_fire, "player_count": player_count, "players": players}
+
+def emit_teams_v60(data):
+    packet = emit_string(data["name"])
+    packet += emit_byte(data["mode"])
+    if data["mode"] in (0, 2):
+        packet += emit_string(data["display_name"])
+        packet += emit_string(data["prefix"])
+        packet += emit_string(data["suffix"])
+        packet += emit_byte(data["friendly_fire"])
+    if data["mode"] in (0, 3, 4):
+        packet += emit_short(data["player_count"])
+        packet += "".join([emit_string(s) for s in data["players"]])
+    return packet
+
+MC_teams_v60 = Parsem(parse_teams_v60, emit_teams_v60)

@@ -23,7 +23,7 @@ from parsing import (defhandshakemsg, defmsg, MC_bool, MC_byte, MC_chunk,
                      MC_multi_block_change2, MC_short, MC_slot_update2,
                      MC_slot_update3, MC_string, MC_string8, MC_unsigned_byte,
                      MC_blob, MC_chunks, MC_chunks2, MC_tile_entity, MC_item_data2,
-                     MC_metadata2)
+                     MC_metadata2, MC_update_score, MC_teams_v56, MC_teams_v60)
 
 protocol = {}
 
@@ -838,3 +838,63 @@ srv_msgs[0x15] = None
 
 srv_msgs[0x38] = defmsg(0x38, "Chunk Bulk",[
     ('chunks', MC_chunks2)])
+
+
+### VERSION 52 - Corresponds to 13w01b
+
+protocol[52] = protocol[51]
+
+
+### VERSION 53 - Corresponds to 13w02b
+
+protocol[53] = tuple(map(list, protocol[52]))
+cli_msgs, srv_msgs = protocol[53]
+
+srv_msgs[0x64] = defmsg(0x64, "Open window", [
+    ('window_id',MC_byte),
+    ('inv_type',MC_byte),
+    ('window_title',MC_string),
+    ('num_slots',MC_byte),
+    ('use_title',MC_bool)])
+
+
+### VERSION 54 - Corresponds to 13w03a
+
+protocol[54] = protocol[53]
+
+
+### VERSION 55 - Corresponds to 13w04a
+
+protocol[55] = tuple(map(list, protocol[54]))
+cli_msgs, srv_msgs = protocol[55]
+
+srv_msgs[0xCE] = defmsg(0xCE, "Scoreboard objective", [
+    ('name',MC_string),
+    ('value',MC_string),
+    ('update_remove',MC_byte)])
+
+
+srv_msgs[0xCF] = defmsg(0xCF, "Update score", [
+    ('data',MC_update_score)])
+
+srv_msgs[0xD0] = defmsg(0xD0, "Display scoreboard", [
+    ('position',MC_byte),
+    ('name',MC_string)])
+
+
+### VERSION 56 - Corresponds to 13w05a
+
+protocol[56] = tuple(map(list, protocol[55]))
+cli_msgs, srv_msgs = protocol[56]
+
+srv_msgs[0xD1] = defmsg(0xD1, "Teams", [
+    ('data',MC_teams_v56)])
+
+
+### VERSION 60 - Corresponds to 1.5
+
+protocol[60] = tuple(map(list, protocol[56]))
+cli_msgs, srv_msgs = protocol[60]
+
+srv_msgs[0xD1] = defmsg(0xD1, "Teams", [
+    ('data',MC_teams_v60)])
